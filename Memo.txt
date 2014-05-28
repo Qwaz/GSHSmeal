@@ -1,0 +1,14 @@
+﻿<Manage.py>
+runserver - 포트 / 아이피:포트
+syncdb - DB 동기화
+startapp 앱이름 - 앱이름 초기화 -> 이후 settings.py에 추가
+
+shell - 인터랙티브 셸 열기
+
+insttNm - 경기과학고등학교
+schulCode - J100000447
+schulCrseScCode 학교 분류 - 4 (고등학교)
+schulKndScCode - 04 (고등학교)
+
+주간식단 - http://hes.goe.go.kr/sts_sci_md01_001.do
+월간식단 - http://hes.goe.go.kr/sts_sci_md00_001.do
