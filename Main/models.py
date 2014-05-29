@@ -1,3 +1,4 @@
+#encoding: utf-8
 from django.db import models
 
 
@@ -14,7 +15,9 @@ class Food(models.Model):
 
 class Meal(models.Model):
 	date = models.DateField()
-	type = models.IntegerField()
+	meal_type = models.IntegerField()
+
+	food_from = models.TextField()
 
 	kcal = models.FloatField()
 	carbohydrate = models.FloatField()
@@ -28,3 +31,6 @@ class Meal(models.Model):
 	iron = models.FloatField()
 
 	foods = models.ManyToManyField(Food)
+
+	def __unicode__(self):
+		return self.date.strftime('%Y.%m.%d') + ' ' + [u'조식', u'중식', u'석식'][self.meal_type - 1]
