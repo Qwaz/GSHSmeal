@@ -37,3 +37,6 @@ class Meal(models.Model):
 
 	def __unicode__(self):
 		return self.date.strftime('%Y.%m.%d') + ' ' + [u'조식', u'중식', u'석식'][self.meal_type - 1]
+
+	def meal_name(self):
+		return ['breakfast', 'lunch', 'dinner'][self.meal_type-1]

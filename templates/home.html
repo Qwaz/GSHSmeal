@@ -1,12 +1,21 @@
 {% extends 'base.html' %}
 
 {% block content %}
-	{% for meal in meals %}
-		{% include 'meal/meal.html' %}
-	{% endfor %}
-	<div class="slide-panel">
+	<div class="panel-group" id="accordion">
 		{% for meal in meals %}
-			{% include 'meal/meal.html' %}
+			{% include 'meal/meal.html' with data_parent="accordion" %}
 		{% endfor %}
 	</div>
+{% endblock %}
+
+{% block script %}
+<script>
+	$(document).ready(function(){
+		var hour = new Date().getHours();
+
+		if(9 <= hour && hour <= 13) $('#lunch').addClass('in');
+		else if(14 <= hour && hour <= 19) $('#dinner').addClass('in');
+		else $('#breakfast').addClass('in');
+	});
+</script>
 {% endblock %}

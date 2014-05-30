@@ -1,10 +1,16 @@
-<div class="panel panel-default inner-panel">
+<div class="panel panel-default">
 	<div class="panel-heading">
-		<h3 class="panel-title">{{ meal }}</h3>
+		<h3 class="panel-title">
+			<a data-toggle="collapse" data-parent="#{{ data_parent }}" href="#{{ meal.meal_name }}">
+				{{ meal }}
+			</a>
+		</h3>
 	</div>
-	<div class="panel-body">
-		{% for food in meal.foods.all %}
-			{{ food.name }}<br>
-		{% endfor %}
+	<div id="{{ meal.meal_name }}" class="panel-collapse collapse">
+		<div class="panel-body">
+			{% for food in meal.foods.all %}
+				{{ food.name }}<br>
+			{% endfor %}
+		</div>
 	</div>
 </div>
