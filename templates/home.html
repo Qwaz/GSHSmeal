@@ -1,5 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
-	Hello, World!
+	{% for meal in meals %}
+		{% include 'meal/meal.html' %}
+	{% endfor %}
+	<div class="slide-panel">
+		{% for meal in meals %}
+			{% include 'meal/meal.html' %}
+		{% endfor %}
+	</div>
 {% endblock %}

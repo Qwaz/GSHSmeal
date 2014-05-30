@@ -12,6 +12,9 @@ class Food(models.Model):
 	name = models.CharField(max_length=50)
 	allergy = models.IntegerField()
 
+	def __unicode__(self):
+		return self.name
+
 
 class Meal(models.Model):
 	date = models.DateField()

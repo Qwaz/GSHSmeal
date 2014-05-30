@@ -2,9 +2,47 @@
 <html>
 <head>
 	<title>GSHS Meal</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/static/slide_panel.css">
+
+	<style>
+		body {
+			padding-top: 70px;
+		}
+	</style>
 </head>
 <body>
-	{% block content %}
+	<nav class="navbar navbar-default navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="/">GSHS Meal</a>
+			</div>
+			<div class="collapse navbar-collapse" id="main-navbar">
+				<ul class="nav navbar-nav">
+					<li><a href="#">로그인 관련 메뉴</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<div class="container">
+		{% block content %}
+		{% endblock %}
+	</div>
+
+	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+	<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+	<script src="/static/slide_panel.js"></script>
+
+	{% block script %}
 	{% endblock %}
 </body>
 </html>

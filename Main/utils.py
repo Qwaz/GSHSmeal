@@ -74,15 +74,15 @@ def update_meal(meal_date):
 
 			ms = MealSet(i)
 			row_func = {
-			0: ms.set_timestamp, 2: ms.set_foods, 15: ms.set_etc,
-			17: ms.set_etc, 18: ms.set_etc, 19: ms.set_etc, 20: ms.set_etc, 21: ms.set_etc,
-			22: ms.set_etc, 23: ms.set_etc, 24: ms.set_etc, 25: ms.set_etc, 26: ms.set_etc
+				0: ms.set_timestamp, 2: ms.set_foods, 15: ms.set_etc,
+				17: ms.set_etc, 18: ms.set_etc, 19: ms.set_etc, 20: ms.set_etc, 21: ms.set_etc,
+				22: ms.set_etc, 23: ms.set_etc, 24: ms.set_etc, 25: ms.set_etc, 26: ms.set_etc
 			}
 
 			row_args = {
-			15: 'food_from', 17: 'kcal', 18: 'carbohydrate', 19: 'protein',
-			20: 'fat', 21: 'vitamin_a', 22: 'thiamine', 23: 'riboflavin',
-			24: 'vitamin_c', 25: 'calcium', 26: 'iron'
+				15: 'food_from', 17: 'kcal', 18: 'carbohydrate', 19: 'protein',
+				20: 'fat', 21: 'vitamin_a', 22: 'thiamine', 23: 'riboflavin',
+				24: 'vitamin_c', 25: 'calcium', 26: 'iron'
 			}
 
 			row_count = 0
