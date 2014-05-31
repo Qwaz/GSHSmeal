@@ -1,0 +1,23 @@
+<form class="form-horizontal" action="{{ action }}" method="post">
+	{% csrf_token %}
+	{% for field in form %}
+		{% if field.is_hidden %}
+			<input type="hidden" value="{{ field.value }}">
+		{% else %}
+			<div class="form-group {% if field.errors %}has-error{% endif %}">
+				<label for="{{ field.id_for_label }}" class="col-sm-2 control-label">{{ field.label }}</label>
+				<div class="col-sm-5">
+					{{ field }}
+				</div>
+				<div class="col-sm-5">
+					<span class="label label-danger">{{ field.errors|first }}</span>
+				</div>
+			</div>
+		{% endif %}
+	{% endfor %}
+	<div class="form-group">
+		<div class="col-sm-offset-2 col-sm-10">
+			<button type="submit" class="btn btn-default">확인</button>
+		</div>
+	</div>
+</form>
