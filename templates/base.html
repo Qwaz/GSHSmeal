@@ -36,6 +36,12 @@
 	</nav>
 
 	<div class="container">
+		{% if message %}
+			<div class="alert alert-{{ message_type }}">
+				{{ message|safe }}
+			</div>
+		{% endif %}
+
 		{% block content %}
 		{% endblock %}
 	</div>

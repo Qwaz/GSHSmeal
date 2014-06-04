@@ -1,8 +1,8 @@
 #encoding: utf-8
-from datetime import date, datetime, timedelta
+from datetime import date, datetime
 
 from django.db import transaction
-from BeautifulSoup import BeautifulSoup, Tag
+from bs4 import BeautifulSoup, Tag
 import requests
 
 from Main.models import Update, Food, Meal
@@ -10,7 +10,7 @@ from Main.models import Update, Food, Meal
 
 class MealSet():
 	def __init__(self, meal_type):
-		self.__meal_count = 0
+		self._meal_count = 0
 		self.meals = []
 		self.foods = []
 
@@ -20,12 +20,12 @@ class MealSet():
 			self.foods.append([])
 
 	def _count_step(self):
-		self.__meal_count += 1
-		if self.__meal_count == 7:
-			self.__meal_count = 0
+		self._meal_count += 1
+		if self._meal_count == 7:
+			self._meal_count = 0
 
 	def set_timestamp(self, data):
-		setattr(self.meals[self.__meal_count], 'date', datetime.strptime(data[0:10], "%Y.%m.%d").date())
+		setattr(self.meals[self._meal_count], 'date', datetime.strptime(data[0:10], "%Y.%m.%d").date())
 		self._count_step()
 
 	def set_foods(self, data):
@@ -38,14 +38,17 @@ class MealSet():
 					food_name = food_name[:-1]
 
 			food = Food.objects.get_or_create(name=food_name, allergy=allergy)[0]
-			self.foods[self.__meal_count].append(food)
+			self.foods[self._meal_count].append(food)
 		self._count_step()
 
 	def set_etc(self, column_name, data):
-		try:
-			setattr(self.meals[self.__meal_count], column_name, float(data))
-		except ValueError:
-			setattr(self.meals[self.__meal_count], column_name, data)
+		if column_name == 'food_from':
+			setattr(self.meals[self._meal_count], column_name, data)
+		else:
+			try:
+				setattr(self.meals[self._meal_count], column_name, float(data))
+			except ValueError:
+				setattr(self.meals[self._meal_count], column_name, 0.0)
 		self._count_step()
 
 	def save(self):
@@ -107,6 +110,3 @@ def update_meal(meal_date):
 def update_today():
 	today = date.today()
 	update_meal(today)
-
-	time_delta = timedelta(days=7)
-	update_meal(today + time_delta)

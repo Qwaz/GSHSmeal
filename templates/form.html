@@ -1,8 +1,8 @@
-<form class="form-horizontal" action="{{ action }}" method="post">
+<form class="form-horizontal" action="{{ action }}" {% if onsubmit %}onsubmit="{{ onsubmit }}"{% endif %} method="post">
 	{% csrf_token %}
 	{% for field in form %}
 		{% if field.is_hidden %}
-			<input type="hidden" value="{{ field.value }}">
+			{{ field }}
 		{% else %}
 			<div class="form-group {% if field.errors %}has-error{% endif %}">
 				<label for="{{ field.id_for_label }}" class="col-sm-2 control-label">{{ field.label }}</label>

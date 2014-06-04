@@ -10,6 +10,8 @@
 		<div class="panel-body">
 			{% for food in meal.foods.all %}
 				{{ food.name }}<br>
+			{% empty %}
+				급식 정보가 없습니다.
 			{% endfor %}
 		</div>
 	</div>

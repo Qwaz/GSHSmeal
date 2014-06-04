@@ -7,9 +7,15 @@ class BootstrapForm(forms.Form):
 
 		for field in self.fields:
 			self.fields[field].widget.attrs.update({'class': 'form-control'})
+			self.fields[field].widget.attrs.update({'id': field})
 
 
 class LoginForm(BootstrapForm):
 	id = forms.CharField()
-	password = forms.CharField(widget=forms.PasswordInput)
-	identifier = forms.CharField(widget=forms.HiddenInput)
+	password = forms.CharField(widget=forms.PasswordInput, required=False)
+
+	jsession_id = forms.CharField()
+	m = forms.CharField(required=False)
+
+	secure_id = forms.CharField(widget=forms.HiddenInput)
+	secure_password = forms.CharField(widget=forms.HiddenInput)

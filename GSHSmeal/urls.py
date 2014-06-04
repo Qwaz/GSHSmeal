@@ -5,12 +5,7 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-                       # Examples:
-                       # url(r'^$', 'GSHSmeal.views.home', name='home'),
-                       # url(r'^blog/', include('blog.urls')),
-
                        url(r'^admin/', include(admin.site.urls)),
                        url(r'^$', 'Main.views.home', name='home'),
-                       url(r'^test/$', 'Main.views.test', name='test'),
                        url('^login/$', 'Main.views.login', name='login'),
 )
