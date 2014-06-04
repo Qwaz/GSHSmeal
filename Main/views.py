@@ -4,9 +4,10 @@ from datetime import date
 from django.shortcuts import render, redirect
 
 from models import Meal
+
 from forms import LoginForm
-from utils import update_today
-from Songjuk import login_api
+from utils.update_meal import update_today
+from utils.gshs import login_api
 
 
 # Create your views here.

@@ -1,11 +1,11 @@
 from bs4 import BeautifulSoup
 import requests
 
-from Songjuk import settings
+from utils.gshs import settings
 
 
 def get_session_and_m():
-	r = requests.get(settings.SONGJUK_URL)
+	r = requests.get(settings.HOME_URL)
 
 	soup = BeautifulSoup(r.text)
 	m_tag = soup.find(name='input', id='m')
@@ -29,7 +29,7 @@ def login(rsa_id, rsa_password, jsession_id):
 	soup = BeautifulSoup(r.text)
 
 	message_tag = soup.find('div', class_='alert alert-block lnline')
-	if message_tag:
+	if message_tag and len(message_tag.find_all()) == 2:
 		return message_tag.text
 	else:
 		return True
