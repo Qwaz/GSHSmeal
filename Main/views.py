@@ -18,6 +18,9 @@ def home(request):
 
 
 def login(request):
+	if 'user_name' in request.session:
+		return redirect('home')
+
 	if request.method == 'POST':
 		form = LoginForm(request.POST)
 		if form.is_valid():
@@ -34,6 +37,7 @@ def login(request):
 				    'message': login_result,
 				})
 			else:
+				request.session['user_name'] = form.cleaned_data['id']
 				return redirect('home')
 	else:
 		form = LoginForm()
@@ -42,3 +46,10 @@ def login(request):
 	return render(request, 'login.html', {
 		'form': form
 	})
+
+
+def logout(request):
+	if 'user_name' in request.session:
+		del request.session['user_name']
+
+	return redirect('home')
