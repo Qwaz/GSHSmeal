@@ -2,9 +2,9 @@
 from datetime import date
 
 from django.shortcuts import render, redirect
+from django.contrib import messages
 
 from models import Meal
-
 from forms import LoginForm
 from utils.update_meal import update_today
 from utils.gshs import login_api
@@ -32,13 +32,12 @@ def login(request):
 
 				form = LoginForm(post_dict)
 
-				return render(request, 'login.html', {
-					'form': form,
-				    'message_type': 'danger',
-				    'message': login_result,
-				})
+				messages.error(request, login_result)
+				return render(request, 'login.html', {'form': form})
 			else:
 				request.session['user_name'] = form.cleaned_data['id']
+
+				messages.success(request, u'로그인에 성공했습니다')
 				return redirect('home')
 	else:
 		form = LoginForm()

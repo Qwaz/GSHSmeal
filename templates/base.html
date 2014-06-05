@@ -45,11 +45,11 @@
 	</nav>
 
 	<div class="container">
-		{% if message %}
-			<div class="alert alert-{{ message_type }}">
-				{{ message|safe }}
+		{% for message in messages %}
+			<div class="alert alert-{{ message.tags }}">
+				{{ message }}
 			</div>
-		{% endif %}
+		{% endfor %}
 
 		{% block content %}
 		{% endblock %}
