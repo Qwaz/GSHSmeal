@@ -20,6 +20,7 @@ def home(request):
 
 def login(request):
 	if 'user_name' in request.session:
+		messages.info(request, u'이미 로그인되어 있습니다')
 		return redirect('home')
 
 	if request.method == 'POST':
@@ -51,5 +52,7 @@ def login(request):
 def logout(request):
 	if 'user_name' in request.session:
 		del request.session['user_name']
+	else:
+		messages.info(request, u'로그인 상태가 아닙니다')
 
 	return redirect('home')
