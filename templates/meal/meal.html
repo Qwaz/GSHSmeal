@@ -8,11 +8,13 @@
 	</div>
 	<div id="{{ meal.meal_name }}" class="panel-collapse collapse">
 		<div class="panel-body">
-			{% for food in meal.foods.all %}
-				{{ food.name }}<br>
-			{% empty %}
-				급식 정보가 없습니다.
-			{% endfor %}
+			<ul>
+				{% for food in meal.foods.all %}
+					<li><a data-toggle="modal" data-target=".modal" href="{% url 'food_detail' food_id=food.id %}">{{ food.name }}</a></li>
+				{% empty %}
+					급식 정보가 없습니다.
+				{% endfor %}
+			</ul>
 		</div>
 	</div>
 </div>

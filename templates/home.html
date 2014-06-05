@@ -1,6 +1,13 @@
 {% extends 'base/base.html' %}
 
 {% block content %}
+	<div class="modal fade" tabindex="-1" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+			</div>
+		</div>
+	</div>
+
 	<div class="panel-group" id="accordion">
 		{% for meal in meals %}
 			{% include 'meal/meal.html' with data_parent="accordion" %}
@@ -13,9 +20,13 @@
 	$(document).ready(function(){
 		var hour = new Date().getHours();
 
-		if(9 <= hour && hour <= 13) $('#lunch').addClass('in');
-		else if(14 <= hour && hour <= 19) $('#dinner').addClass('in');
-		else $('#breakfast').addClass('in');
+		if(hour < 9) $('#breakfast').addClass('in');
+		else if(9 <= hour && hour < 14) $('#lunch').addClass('in');
+		else if(14 <= hour) $('#dinner').addClass('in');
+	});
+
+	$('body').on('hidden.bs.modal', '.modal', function(){
+		$(this).removeData('bs.modal');
 	});
 </script>
 {% endblock %}

@@ -12,8 +12,20 @@ class Food(models.Model):
 	name = models.CharField(max_length=50)
 	allergy = models.IntegerField()
 
+	ALLERGY_SOURCE = (u'아황산염', u'토마토', u'복숭아', u'돼지고기', u'새우', u'게', u'고등어', u'밀', u'대두', u'땅콩', u'메밀', u'우유', u'난류')
+
 	def __unicode__(self):
 		return self.name
+
+	def allergy_list(self):
+		allergy_list = []
+
+		for i in range(len(self.ALLERGY_SOURCE)):
+			if (self.allergy >> i) & 1:
+				allergy_list.append(self.ALLERGY_SOURCE[i])
+
+		allergy_list.reverse()
+		return allergy_list
 
 
 class Meal(models.Model):
