@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 
-from utils.gshs import settings
+from gshs_auth import settings
 
 
 def get_session_and_m():

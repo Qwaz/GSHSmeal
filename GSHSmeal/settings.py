@@ -36,7 +36,9 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'Main',
+    'south',
+    'gshs_auth',
+    'meals',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -83,6 +85,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (os.path.join('static'),)
 
+# Template settings
+
 TEMPLATE_DIRS = (BASE_DIR + '/templates/')
 
 from django.conf import global_settings
@@ -91,8 +95,15 @@ TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
 	'django.core.context_processors.request',
 )
 
+# Messaging
+
 from django.contrib.messages import constants as message_constants
 
 MESSAGE_TAGS = {
 	message_constants.ERROR: 'danger',
 }
+
+# Authentication
+
+AUTHENTICATION_BACKENDS = ('gshs_auth.backends.UserBackend',)
+AUTH_USER_MODEL = 'gshs_auth.User'

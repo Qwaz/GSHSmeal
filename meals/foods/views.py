@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from Main.models import Food
+from meals.models import Food
 
 
 def food_detail(request, food_id):

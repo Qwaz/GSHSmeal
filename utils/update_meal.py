@@ -5,7 +5,7 @@ from django.db import transaction
 from bs4 import BeautifulSoup, Tag
 import requests
 
-from Main.models import Update, Food, Meal
+from meals.models import Update, Food, Meal
 
 
 class MealSet():
@@ -29,7 +29,7 @@ class MealSet():
 		self._count_step()
 
 	def set_foods(self, data):
-		for food_name in data.split('<br />')[:-1]:
+		for food_name in data.split('<br/>')[:-1]:
 			allergy = 0
 			allergy_mark = u'⑬⑫⑪⑩⑨⑧⑦⑥⑤④③②①'
 			for i in range(len(allergy_mark)):
