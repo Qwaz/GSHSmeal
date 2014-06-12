@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 
-from meals.foods import urls as food_urls
+from meals import urls as meal_urls
 from gshs_auth.decorators import admin_login
 
 
@@ -12,7 +12,7 @@ urlpatterns = patterns('',
                        url(r'^$', 'meals.views.home', name='home'),
                        url(r'^accounts/login/$', 'gshs_auth.views.login_view', name='login'),
                        url(r'^accounts/logout/$', 'gshs_auth.views.logout_view', name='logout'),
-                       url(r'^foods/', include(food_urls)),
+                       url(r'^meals/', include(meal_urls)),
 )
 
 admin.site.login = admin_login(admin.site.login)
