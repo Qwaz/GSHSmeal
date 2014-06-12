@@ -1,5 +1,6 @@
 #encoding: utf-8
 from datetime import date, datetime
+import re
 
 from django.db import transaction
 from bs4 import BeautifulSoup, Tag
@@ -37,6 +38,9 @@ class MealSet():
 					allergy ^= 1 << i
 					food_name = food_name[:-1]
 
+			food_name = re.sub(ur'([\-=*]|\((초|중|고|조|주식)\))*$', '', food_name)
+			food_name = re.sub(r'[0-9]+', '', food_name)
+
 			food = Food.objects.get_or_create(name=food_name, allergy=allergy)[0]
 			self.foods[self._meal_count].append(food)
 		self._count_step()
@@ -65,7 +69,6 @@ def update_meal(meal_date):
 	obj, created = Update.objects.get_or_create(iso_year=iso_calendar[0], iso_week=iso_calendar[1])
 
 	if created:
-
 		for i in range(1, 4):
 			payload = {'insttNm': u'경기과학고등학교', 'schulCode': 'J100000447', 'schulCrseScCode': '4',
 			           'schulKndScCode': '04'}
@@ -89,11 +92,16 @@ def update_meal(meal_date):
 			}
 
 			row_count = 0
+			tr_count = len(soup.findAll('tr'))
+
 			for row in soup.findAll('tr'):
+				if tr_count < 27 and row_count == 2:
+					row_count += 1
+
 				for data in (row.findAll('th') + row.findAll('td'))[1:]:
 					a = data.contents
 					if len(a):
-						tmp_text = u''.join(map(lambda x: unicode(str(x)) if type(x) == Tag else x, a))
+						tmp_text = u''.join(map(lambda x: unicode(x) if type(x) == Tag else x, a))
 					else:
 						tmp_text = ''
 

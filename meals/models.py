@@ -27,6 +27,9 @@ class Food(models.Model):
 		allergy_list.reverse()
 		return allergy_list
 
+	def meals_ordered(self):
+		return self.meal_set.order_by('meal_type').order_by('-date')[:5]
+
 
 class Meal(models.Model):
 	date = models.DateField()

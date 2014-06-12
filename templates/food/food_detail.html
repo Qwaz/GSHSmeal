@@ -9,8 +9,9 @@
 	</h3>
 </div>
 <div class="modal-body">
+	<h4>최근 나왔던 급식</h4>
 	<ul>
-		{% for meal in food.meal_set.all %}
+		{% for meal in food.meals_ordered %}
 			<li>{{ meal }}</li>
 		{% endfor %}
 	</ul>
