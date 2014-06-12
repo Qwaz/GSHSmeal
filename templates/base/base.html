@@ -35,7 +35,7 @@
 						</ul>
 					</li>
 				{% else %}
-					<li><a href="{% url 'login' %}">로그인</a></li>
+					<li><a href="{% url 'login' %}?next={{ request.path }}">로그인</a></li>
 				{% endif %}
 				</ul>
 			</div>

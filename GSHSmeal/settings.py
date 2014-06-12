@@ -107,3 +107,5 @@ MESSAGE_TAGS = {
 
 AUTHENTICATION_BACKENDS = ('gshs_auth.backends.UserBackend',)
 AUTH_USER_MODEL = 'gshs_auth.User'
+
+LOGIN_REDIRECT_URL = 'home'

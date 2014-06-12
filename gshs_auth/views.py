@@ -1,6 +1,7 @@
 #encoding: utf-8
 
 from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 
@@ -9,9 +10,11 @@ from gshs_auth import login_api
 
 
 def login_view(request):
+	redirect_to = request.REQUEST.get('next', '')
+
 	if request.user.is_authenticated():
 		messages.info(request, u'이미 로그인되어 있습니다')
-		return redirect('home')
+		return HttpResponseRedirect(redirect_to)
 
 	if request.method == 'POST':
 		form = LoginForm(request.POST)
@@ -35,14 +38,13 @@ def login_view(request):
 				post_dict['jsession_id'], post_dict['m'] = login_api.get_session_and_m()
 
 				form = LoginForm(post_dict)
-
-				return render(request, 'login.html', {'form': form})
 	else:
 		form = LoginForm()
 		form.fields['jsession_id'].initial, form.fields['m'].initial = login_api.get_session_and_m()
 
 	return render(request, 'login.html', {
-		'form': form
+		'form': form,
+	    'redirect_to': redirect_to,
 	})
 
 
