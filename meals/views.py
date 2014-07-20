@@ -3,12 +3,12 @@ from datetime import date
 from django.shortcuts import render
 
 from models import Meal, Food
-from utils.update_meal import update_today
+from utils.update_meal import update_meals
 
 
 # Create your views here.
 def home(request):
-	update_today()
+	update_meals()
 	return render(request, 'home.html', {
 		'meals': Meal.objects.filter(date=date.today()).order_by('meal_type'),
 	})

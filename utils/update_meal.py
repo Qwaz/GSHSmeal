@@ -1,5 +1,5 @@
 #encoding: utf-8
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 import re
 
 from django.db import transaction
@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup, Tag
 import requests
 
 from meals.models import Update, Food, Meal
+from utils.iso_calendar import iso_to_gregorian
 
 
 class MealSet():
@@ -115,6 +116,18 @@ def update_meal(meal_date):
 			ms.save()
 
 
-def update_today():
-	today = date.today()
-	update_meal(today)
+def update_meals():
+	start_iso = Update.objects.order_by('-iso_year', '-iso_week').first()
+	if start_iso is None:
+		start_iso = date.today().isocalendar()[:2]
+	else:
+		start_iso = (start_iso.iso_year, start_iso.iso_week)
+
+	now = iso_to_gregorian(start_iso[0], start_iso[1], 1)
+
+	last_iso = (date.today()+timedelta(days=1)).isocalendar()[:2]
+	last = iso_to_gregorian(last_iso[0], last_iso[1], 1)
+
+	while now <= last:
+		update_meal(now)
+		now += timedelta(days=7)
