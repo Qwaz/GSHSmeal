@@ -9,6 +9,7 @@
 	</h3>
 </div>
 <div class="modal-body">
+	<div id="rating"></div>
 	<h4>최근 나왔던 급식</h4>
 	<ul>
 		{% for meal in food.meals_ordered %}
@@ -16,3 +17,21 @@
 		{% endfor %}
 	</ul>
 </div>
+
+<script>
+	function loadRating(){
+		$("#rating").html('<div class="spinner"><div class="rect1"></div><div class="rect2"></div><div class="rect3"></div><div class="rect4"></div><div class="rect5"></div></div>');
+
+		$.ajax({
+			url: "{% url 'food_rating' food_id=food.id %}"
+		}).done(function(response){
+			$("#rating").html(response);
+		}).fail(function(response){
+			$("#rating").html('<span class="glyphicon glyphicon-remove"></span>');
+		});
+	}
+
+	$(document).ready(function(){
+		loadRating();
+	});
+</script>
