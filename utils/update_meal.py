@@ -6,7 +6,7 @@ from django.db import transaction
 from bs4 import BeautifulSoup, Tag
 import requests
 
-from meals.models import Update, Food, Meal
+from meals.models import Update, Food, Meal, Menu
 from utils.iso_calendar import iso_to_gregorian
 
 
@@ -60,7 +60,7 @@ class MealSet():
 		for i in range(7):
 			self.meals[i].save()
 			for food in self.foods[i]:
-				self.meals[i].foods.add(food)
+				menu = Menu.objects.create(food=food, meal=self.meals[i])
 
 
 @transaction.atomic
