@@ -2,7 +2,6 @@
 from django.db import models
 
 
-# Create your models here.
 class Update(models.Model):
 	iso_year = models.IntegerField()
 	iso_week = models.IntegerField()
@@ -28,7 +27,7 @@ class Food(models.Model):
 		return allergy_list
 
 	def meals_ordered(self):
-		return self.meal_set.order_by('meal_type').order_by('-date')[:5]
+		return self.meal_set.order_by('-date', 'meal_type')[:5]
 
 
 class Meal(models.Model):

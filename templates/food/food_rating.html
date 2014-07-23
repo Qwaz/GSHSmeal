@@ -1,5 +1,12 @@
 <div class="spinner-content">
-	<input type="number" class="rating" min="0" max="5" step="0.5">
+	<h4>평균 별점</h4>
+	{{ food.get_overall_rating | default:'N/A' }}점
+	<input type="number" value="{{ food.get_overall_rating }}" data-readonly="true" class="rating" min="0" max="5" step="0.01">
+	<h4>평가 가능 목록</h4>
+	{% for menu in food.get_ratable_menu %}
+		<h5>[ {{ menu.meal }} ]</h5>
+		<input type="number" class="rating" min="0" max="5" step="0.5">
+	{% endfor %}
 	<button id="rating-submit" class="btn btn-default">확인</button>
 </div>
 

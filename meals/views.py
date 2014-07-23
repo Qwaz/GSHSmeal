@@ -6,7 +6,6 @@ from models import Meal, Food
 from utils.update_meal import update_meals
 
 
-# Create your views here.
 def home(request):
 	update_meals()
 	return render(request, 'home.html', {

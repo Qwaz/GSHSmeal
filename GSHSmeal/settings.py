@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'gshs_auth',
     'meals',
+    'meals.rating',
 )
 
 MIDDLEWARE_CLASSES = (
