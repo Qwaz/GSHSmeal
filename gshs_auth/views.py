@@ -10,7 +10,7 @@ from gshs_auth import login_api
 
 
 def login_view(request):
-	redirect_to = request.REQUEST.get('next', '')
+	redirect_to = request.REQUEST.get('next', '/')
 
 	if request.user.is_authenticated():
 		messages.info(request, u'이미 로그인되어 있습니다')
