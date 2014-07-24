@@ -2,7 +2,6 @@
 from datetime import date, datetime, time, timedelta
 
 from django.db import models
-
 from django.db.models import Avg, Q
 
 from gshs_auth.models import User
@@ -17,14 +16,17 @@ class Rating(models.Model):
 
 
 def get_overall_rating(self):
-	ret = Rating.objects.filter(menu__food=self).aggregate(Avg('value'))['value__avg']
+	ret = Rating.objects.filter(menu__food=self).aggregate(Avg('value'))['value__avg']/2
 
 	if ret is None:
 		return 0
 	return ret
 
 
-def get_ratable_menu(self):
+def get_ratable_menu(self, user):
+	if not user.is_authenticated():
+		return
+
 	yesterday = date.today()-timedelta(days=1)
 	today = date.today()
 	now_time = datetime.now()
@@ -38,7 +40,9 @@ def get_ratable_menu(self):
 	else:
 		now_meal = 0
 
-	return Menu.objects.filter(
+	rated_menu = Rating.objects.filter(user=user).values_list('menu_id', flat=True)
+
+	return Menu.objects.exclude(id__in=rated_menu).filter(
 		Q(meal__date=yesterday, meal__meal_type__gt=now_meal) | Q(meal__date=today, meal__meal_type__lte=now_meal),
 		food=self
 	).order_by('meal__date', 'meal__meal_type')
