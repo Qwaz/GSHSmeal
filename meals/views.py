@@ -3,7 +3,7 @@ from datetime import date
 from django.shortcuts import render
 
 from models import Meal, Food
-from utils.update_meal import update_meals
+from meals.update_meal import update_meals
 
 
 def home(request):
