@@ -1,15 +1,40 @@
-from datetime import date
+from datetime import date, datetime, timedelta
 
 from django.shortcuts import render
+from django.http import Http404
 
 from models import Meal, Food
 from meals.update_meal import update_meals
 
 
 def home(request):
+	prev_day = Meal.objects.filter(date=date.today()-timedelta(days=1)).first()
+	next_day = Meal.objects.filter(date=date.today()+timedelta(days=1)).first()
+
 	update_meals()
-	return render(request, 'home.html', {
+	return render(request, 'meal.html', {
 		'meals': Meal.objects.filter(date=date.today()).order_by('meal_type'),
+	    'prev_day': prev_day.date if prev_day else None,
+	    'next_day': next_day.date if next_day else None,
+	    'isHome': True,
+	})
+
+
+def meal_view(request, date_str):
+	try:
+		today = datetime.strptime(date_str, '%Y-%m-%d').date()
+
+		prev_day = Meal.objects.filter(date=today-timedelta(days=1)).first(a)
+		next_day = Meal.objects.filter(date=today+timedelta(days=1)).first()
+
+		meals = Meal.objects.filter(date=today)
+	except ValueError:
+		return Http404
+
+	return render(request, 'meal.html', {
+		'meals': meals,
+	    'prev_day': prev_day.date if prev_day else None,
+	    'next_day': next_day.date if next_day else None,
 	})
 
 
