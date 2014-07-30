@@ -24,7 +24,7 @@ def meal_view(request, date_str):
 	try:
 		today = datetime.strptime(date_str, '%Y-%m-%d').date()
 
-		prev_day = Meal.objects.filter(date=today-timedelta(days=1)).first(a)
+		prev_day = Meal.objects.filter(date=today-timedelta(days=1)).first()
 		next_day = Meal.objects.filter(date=today+timedelta(days=1)).first()
 
 		meals = Meal.objects.filter(date=today)
