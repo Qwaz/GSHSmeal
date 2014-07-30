@@ -60,7 +60,7 @@ class MealSet():
 		for i in range(7):
 			self.meals[i].save()
 			for food in self.foods[i]:
-				menu = Menu.objects.create(food=food, meal=self.meals[i])
+				Menu.objects.create(food=food, meal=self.meals[i])
 
 
 @transaction.atomic
