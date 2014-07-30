@@ -1,6 +1,8 @@
 #encoding: utf-8
 from django.db import models
 
+from gshs_auth.models import User
+
 
 class Update(models.Model):
 	iso_year = models.IntegerField()
@@ -10,6 +12,8 @@ class Update(models.Model):
 class Food(models.Model):
 	name = models.CharField(max_length=50)
 	allergy = models.IntegerField()
+
+	favorite_by = models.ManyToManyField(User, related_name='favorites')
 
 	ALLERGY_SOURCE = (u'아황산염', u'토마토', u'복숭아', u'돼지고기', u'새우', u'게', u'고등어', u'밀', u'대두', u'땅콩', u'메밀', u'우유', u'난류')
 

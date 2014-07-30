@@ -17,6 +17,20 @@
 		{% endfor %}
 	</ul>
 </div>
+<div class="modal-footer">
+	{% if request.user.is_authenticated %}
+		{% if now_favorite %}
+			<button type="button" id="favorite" class="btn btn-default">
+				<span class="glyphicon glyphicon-star"></span> 즐겨찾기 <span id="favorite-text">해제</span>
+			</button>
+		{% else %}
+			<button type="button" id="favorite" class="btn btn-primary">
+				<span class="glyphicon glyphicon-star"></span> 즐겨찾기 <span id="favorite-text">등록</span>
+			</button>
+		{% endif %}
+	{% endif %}
+	<button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+</div>
 
 <script>
 	function loadRating(){
@@ -33,5 +47,29 @@
 
 	$(document).ready(function(){
 		loadRating();
+
+		$("#favorite").click(function(){
+			var params = {
+				type: "POST",
+				url: "{% url 'update_favorite' %}",
+				data: {
+					food_id: "{{ food.id }}"
+				}
+			};
+
+			if($(this).hasClass("btn-default")){
+				$(this).addClass("btn-primary");
+				$(this).removeClass("btn-default");
+				$("#favorite-text").text("등록");
+				params.data.add = 0;
+			} else {
+				$(this).removeClass("btn-primary");
+				$(this).addClass("btn-default");
+				$("#favorite-text").text("해제");
+				params.data.add = 1;
+			}
+
+			$.ajax(params);
+		});
 	});
 </script>
