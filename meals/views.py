@@ -9,13 +9,14 @@ from meals.update_meal import update_meals
 
 
 def home(request):
+	update_meals()
+	
 	today = date.today()
 	day = u"월화수목금토일"[today.weekday()]
 
 	prev_day = Meal.objects.filter(date=today-timedelta(days=1)).first()
 	next_day = Meal.objects.filter(date=today+timedelta(days=1)).first()
 
-	update_meals()
 	return render(request, 'meal.html', {
 		'meals': Meal.objects.filter(date=date.today()).order_by('meal_type'),
 	    'today': today.strftime('%Y.%m.%d'),

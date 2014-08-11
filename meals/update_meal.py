@@ -119,7 +119,7 @@ def update_meal(meal_date):
 def update_meals():
 	start_iso = Update.objects.order_by('-iso_year', '-iso_week').first()
 	if start_iso is None:
-		start_iso = date.today().isocalendar()[:2]
+		start_iso = date(2014, 2, 17).isocalendar()[:2]
 	else:
 		start_iso = (start_iso.iso_year, start_iso.iso_week)
 
