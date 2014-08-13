@@ -70,7 +70,7 @@ DATABASES = {
 
 LANGUAGE_CODE = 'ko-kr'
 
-TIME_ZONE = 'UTC+9'
+TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
@@ -83,11 +83,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (os.path.join('static'),)
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+STATIC_ROOT = '/var/www/html/static/'
 
 # Template settings
 
-TEMPLATE_DIRS = (BASE_DIR + '/templates/')
+TEMPLATE_DIRS = (os.path.join(BASE_DIR, 'templates'))
 
 from django.conf import global_settings
 
