@@ -32,7 +32,7 @@
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> {{ request.user.username }} <b class="caret"></b></a>
 						<ul class="dropdown-menu">
 							{% if request.user.is_staff %}
-								<li><a href="/admin/">관리 메뉴</a></li>
+								<li><a href="{% url 'admin:index' %}">관리 메뉴</a></li>
 								<li class="divider"></li>
 							{% endif %}
 							<li><a href="{% url 'logout' %}">로그아웃</a></li>
