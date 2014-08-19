@@ -31,7 +31,9 @@ def get_ratable_menu(self, user):
 	today = date.today()
 	now_time = datetime.now()
 
-	if now_time.hour >= 18:
+	if now_time.hour >= 21:
+		now_meal = 4
+	elif now_time.hour >= 18:
 		now_meal = 3
 	elif now_time.hour >= 12:
 		now_meal = 2
@@ -54,7 +56,7 @@ Food.get_ratable_menu = get_ratable_menu
 def is_ratable(self):
 	now_time = datetime.now()
 
-	meal_time = [time(hour=7), time(hour=12), time(hour=18)][self.meal_type - 1]
+	meal_time = [time(hour=7), time(hour=12), time(hour=18), time(hour=21)][self.meal_type - 1]
 	meal_datetime = datetime.combine(self.date, meal_time)
 
 	return now_time >= meal_datetime and now_time-meal_datetime <= timedelta(days=1)
