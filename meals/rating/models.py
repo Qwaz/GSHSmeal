@@ -20,7 +20,7 @@ def get_overall_rating(self):
 
 	if ret is None:
 		return 0
-	return ret
+	return round(ret, 2)
 
 
 def get_ratable_menu(self, user):
