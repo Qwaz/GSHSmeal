@@ -8,17 +8,14 @@ from models import Meal, Food
 from meals.update_meal import update_meals
 
 
-def home(request):
-	update_meals()
-	
-	today = date.today()
+def meal_by_date(request, today):
 	day = u"월화수목금토일"[today.weekday()]
 
 	prev_day = Meal.objects.filter(date=today-timedelta(days=1)).first()
 	next_day = Meal.objects.filter(date=today+timedelta(days=1)).first()
 
 	return render(request, 'meal.html', {
-		'meals': Meal.objects.filter(date=date.today()).order_by('meal_type'),
+		'meals': Meal.objects.filter(date=today).order_by('meal_type'),
 	    'today': today.strftime('%Y.%m.%d'),
 	    'day': day,
 	    'prev_day': prev_day.date if prev_day else None,
@@ -27,25 +24,17 @@ def home(request):
 	})
 
 
+def home(request):
+	update_meals()
+
+	return meal_by_date(request, date.today())
+
+
 def meal_view(request, date_str):
 	try:
-		today = datetime.strptime(date_str, '%Y-%m-%d').date()
-		day = u"월화수목금토일"[today.weekday()]
-
-		prev_day = Meal.objects.filter(date=today-timedelta(days=1)).first()
-		next_day = Meal.objects.filter(date=today+timedelta(days=1)).first()
-
-		meals = Meal.objects.filter(date=today)
+		return meal_by_date(request, datetime.strptime(date_str, '%Y-%m-%d').date())
 	except ValueError:
 		return Http404
-
-	return render(request, 'meal.html', {
-		'meals': meals,
-	    'today': today.strftime('%Y.%m.%d'),
-	    'day': day,
-	    'prev_day': prev_day.date if prev_day else None,
-	    'next_day': next_day.date if next_day else None,
-	})
 
 
 def food_detail(request, food_id):
