@@ -8,7 +8,7 @@ from models import Meal, Food
 from meals.update_meal import update_meals
 
 
-def meal_by_date(request, today):
+def meal_by_date(request, today, is_home):
 	day = u"월화수목금토일"[today.weekday()]
 
 	prev_day = Meal.objects.filter(date=today-timedelta(days=1)).first()
@@ -20,19 +20,19 @@ def meal_by_date(request, today):
 	    'day': day,
 	    'prev_day': prev_day.date if prev_day else None,
 	    'next_day': next_day.date if next_day else None,
-	    'isHome': True,
+	    'isHome': is_home,
 	})
 
 
 def home(request):
 	update_meals()
 
-	return meal_by_date(request, date.today())
+	return meal_by_date(request, date.today(), is_home=True)
 
 
 def meal_view(request, date_str):
 	try:
-		return meal_by_date(request, datetime.strptime(date_str, '%Y-%m-%d').date())
+		return meal_by_date(request, datetime.strptime(date_str, '%Y-%m-%d').date(), is_home=False)
 	except ValueError:
 		return Http404
 
