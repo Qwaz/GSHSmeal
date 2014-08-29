@@ -36,7 +36,8 @@
 		if(isHome){
 			var hour = new Date().getHours();
 
-			if(hour < 9) $('#breakfast').addClass('in');
+			if(19 <= hour && $('#snack').length > 0) $('#snack').addClass('in');
+			else if(hour < 9) $('#breakfast').addClass('in');
 			else if(9 <= hour && hour < 14) $('#lunch').addClass('in');
 			else if(14 <= hour) $('#dinner').addClass('in');
 		} else {
