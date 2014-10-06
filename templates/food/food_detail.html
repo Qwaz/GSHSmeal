@@ -2,6 +2,9 @@
 	<h3>
 		{{ food.name }}
 		<small>
+			{% if food.is_snack %}
+				<span class="label label-primary">간식</span>
+			{% endif %}
 			{% for allergy in food.allergy_list %}
 				<span class="label label-info">{{ allergy }}</span>
 			{% endfor %}

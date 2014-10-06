@@ -16,11 +16,11 @@ class Rating(models.Model):
 
 
 def get_overall_rating(self):
-	ret = Rating.objects.filter(menu__food=self).aggregate(Avg('value'))['value__avg']/2
+	ret = Rating.objects.filter(menu__food=self).aggregate(Avg('value'))['value__avg']
 
 	if ret is None:
 		return 0
-	return round(ret, 2)
+	return round(ret/2, 2)
 
 
 def get_ratable_menu(self, user):
