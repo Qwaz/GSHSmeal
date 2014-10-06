@@ -88,7 +88,7 @@ STATIC_ROOT = '/var/www/html/static/'
 
 # Template settings
 
-TEMPLATE_DIRS = (os.path.join(BASE_DIR, 'templates'))
+TEMPLATE_DIRS = (os.path.join(BASE_DIR, 'templates'),)
 
 from django.conf import global_settings
 
