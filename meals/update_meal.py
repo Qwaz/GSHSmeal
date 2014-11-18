@@ -1,8 +1,10 @@
 #encoding: utf-8
 from datetime import date, datetime, timedelta
+from threading import Thread
 import re
 
 from django.db import transaction
+
 from bs4 import BeautifulSoup, Tag
 import requests
 
@@ -42,7 +44,7 @@ class MealSet():
 			food_name = re.sub(ur'([\-=*]|\((초|중|고|조|주식)\))*$', '', food_name)
 			food_name = re.sub(r'[0-9]+', '', food_name)
 
-			food = Food.objects.get_or_create(name=food_name, allergy=allergy)[0]
+			food = Food.objects.get_or_create(name=food_name, allergy=allergy, is_snack=False)[0]
 			self.foods[self._meal_count].append(food)
 		self._count_step()
 
@@ -63,57 +65,67 @@ class MealSet():
 				Menu.objects.create(food=food, meal=self.meals[i])
 
 
-@transaction.atomic
-def update_meal(meal_date):
-	iso_calendar = meal_date.isocalendar()
+class ParseThread(Thread):
+	def __init__(self, meal_date):
+		self.meal_date = meal_date
+		super(ParseThread, self).__init__()
 
-	obj, created = Update.objects.get_or_create(iso_year=iso_calendar[0], iso_week=iso_calendar[1])
+	@transaction.atomic
+	def run(self):
+		iso_calendar = self.meal_date.isocalendar()
 
-	if created:
-		for i in range(1, 4):
-			payload = {'insttNm': u'경기과학고등학교', 'schulCode': 'J100000447', 'schulCrseScCode': '4',
-			           'schulKndScCode': '04'}
-			payload['schYmd'] = meal_date.strftime("%Y.%m.%d")
-			payload['schMmealScCode'] = str(i)
-			r = requests.post('http://hes.goe.go.kr/sts_sci_md01_001.do', payload)
+		obj, created = Update.objects.get_or_create(iso_year=iso_calendar[0], iso_week=iso_calendar[1])
 
-			soup = BeautifulSoup(r.text)
+		if created:
+			for i in range(1, 4):
+				payload = {'insttNm': u'경기과학고등학교', 'schulCode': 'J100000447', 'schulCrseScCode': '4',
+				           'schulKndScCode': '04'}
+				payload['schYmd'] = self.meal_date.strftime("%Y.%m.%d")
+				payload['schMmealScCode'] = str(i)
+				r = requests.post('http://hes.goe.go.kr/sts_sci_md01_001.do', payload)
 
-			ms = MealSet(i)
-			row_func = {
-				0: ms.set_timestamp, 2: ms.set_foods, 15: ms.set_etc,
-				17: ms.set_etc, 18: ms.set_etc, 19: ms.set_etc, 20: ms.set_etc, 21: ms.set_etc,
-				22: ms.set_etc, 23: ms.set_etc, 24: ms.set_etc, 25: ms.set_etc, 26: ms.set_etc
-			}
+				soup = BeautifulSoup(r.text)
 
-			row_args = {
-				15: 'food_from', 17: 'kcal', 18: 'carbohydrate', 19: 'protein',
-				20: 'fat', 21: 'vitamin_a', 22: 'thiamine', 23: 'riboflavin',
-				24: 'vitamin_c', 25: 'calcium', 26: 'iron'
-			}
+				ms = MealSet(i)
+				row_func = {
+					0: ms.set_timestamp, 2: ms.set_foods, 15: ms.set_etc,
+					17: ms.set_etc, 18: ms.set_etc, 19: ms.set_etc, 20: ms.set_etc, 21: ms.set_etc,
+					22: ms.set_etc, 23: ms.set_etc, 24: ms.set_etc, 25: ms.set_etc, 26: ms.set_etc
+				}
 
-			row_count = 0
-			tr_count = len(soup.findAll('tr'))
+				row_args = {
+					15: 'food_from', 17: 'kcal', 18: 'carbohydrate', 19: 'protein',
+					20: 'fat', 21: 'vitamin_a', 22: 'thiamine', 23: 'riboflavin',
+					24: 'vitamin_c', 25: 'calcium', 26: 'iron'
+				}
 
-			for row in soup.findAll('tr'):
-				if tr_count < 27 and row_count == 2:
+				row_count = 0
+				tr_count = len(soup.findAll('tr'))
+
+				for row in soup.findAll('tr'):
+					if tr_count < 27 and row_count == 2:
+						row_count += 1
+
+					for data in (row.findAll('th') + row.findAll('td'))[1:]:
+						a = data.contents
+						if len(a):
+							tmp_text = u''.join(map(lambda x: unicode(x) if type(x) == Tag else x, a))
+						else:
+							tmp_text = ''
+
+						if row_count in row_func:
+							if row_count in row_args:
+								row_func[row_count](data=tmp_text, column_name=row_args[row_count])
+							else:
+								row_func[row_count](data=tmp_text)
 					row_count += 1
 
-				for data in (row.findAll('th') + row.findAll('td'))[1:]:
-					a = data.contents
-					if len(a):
-						tmp_text = u''.join(map(lambda x: unicode(x) if type(x) == Tag else x, a))
-					else:
-						tmp_text = ''
+				ms.save()
 
-					if row_count in row_func:
-						if row_count in row_args:
-							row_func[row_count](data=tmp_text, column_name=row_args[row_count])
-						else:
-							row_func[row_count](data=tmp_text)
-				row_count += 1
 
-			ms.save()
+def update_meal(meal_date):
+		t = ParseThread(meal_date)
+		t.start()
 
 
 def update_meals():
