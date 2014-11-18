@@ -124,22 +124,31 @@ class ParseThread(Thread):
 
 
 def update_meal(meal_date):
-		t = ParseThread(meal_date)
-		t.start()
+	t = ParseThread(meal_date)
+	t.start()
 
 
 def update_meals():
 	start_iso = Update.objects.order_by('-iso_year', '-iso_week').first()
 	if start_iso is None:
+		#데이터가 존재하지 않는 경우 2월 17일부터 파싱 시작
 		start_iso = date(2014, 2, 17).isocalendar()[:2]
 	else:
+		#그렇지 않은 경우 마지막 업데이트부터 파싱 시작
 		start_iso = (start_iso.iso_year, start_iso.iso_week)
 
 	now = iso_to_gregorian(start_iso[0], start_iso[1], 1)
 
+	#내일 날짜의 년/주를 선택
 	last_iso = (date.today()+timedelta(days=1)).isocalendar()[:2]
 	last = iso_to_gregorian(last_iso[0], last_iso[1], 1)
 
-	while now <= last:
-		update_meal(now)
+	updating = False
+
+	while now < last:
+		updating = True
 		now += timedelta(days=7)
+		update_meal(now)
+
+	#현재 급식 업데이트중이라면 True 반환
+	return updating

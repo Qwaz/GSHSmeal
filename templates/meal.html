@@ -18,6 +18,13 @@
 		{% endfor %}
 	</div>
 
+	{% if updating %}
+	<div class="bs-callout bs-callout-warning">
+		<h4>급식 정보가 업데이트 되는 중입니다.</h4>
+		업데이트가 완료될 때까지 잠시 기다려주세요.
+	</div>
+	{% endif %}
+
 	<ul class="pager">
 		{% if prev_day %}
 			<li class="previous"><a href="{% url 'meal_view' prev_day|date:"Y-m-d" %}">&larr; {{ prev_day | date:"Y.m.d." }}</a></li>

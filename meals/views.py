@@ -25,9 +25,18 @@ def meal_by_date(request, today, is_home):
 
 
 def home(request):
-	update_meals()
-
-	return meal_by_date(request, date.today(), is_home=True)
+	today = date.today()
+	if update_meals():
+		#급식 업데이트 중이라면 에러 메시지 출력
+		return render(request, 'meal.html', {
+			'meals': None,
+		    'today': today.strftime('%Y.%m.%d'),
+		    'day': u"월화수목금토일"[today.weekday()],
+		    'updating': True,
+		    'isHome': True,
+		})
+	#아니라면 오늘의 급식 출력
+	return meal_by_date(request, today, is_home=True)
 
 
 def meal_view(request, date_str):
