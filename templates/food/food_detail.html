@@ -1,78 +1,78 @@
 <div class="modal-header">
-	<h3>
-		{{ food.name }}
-		<small>
-			{% if food.is_snack %}
-				<span class="label label-primary">간식</span>
-			{% endif %}
-			{% for allergy in food.allergy_list %}
-				<span class="label label-info">{{ allergy }}</span>
-			{% endfor %}
-		</small>
-	</h3>
+    <h3>
+        {{ food.name }}
+        <small>
+            {% if food.is_snack %}
+                <span class="label label-primary">간식</span>
+            {% endif %}
+            {% for allergy in food.allergy_list %}
+                <span class="label label-info">{{ allergy }}</span>
+            {% endfor %}
+        </small>
+    </h3>
 </div>
 <div class="modal-body">
-	<div id="rating"></div>
-	<h4>최근 나왔던 급식</h4>
-	<ul>
-		{% for meal in food.meals_ordered %}
-			<li>{{ meal }}</li>
-		{% endfor %}
-	</ul>
+    <div id="rating"></div>
+    <h4>최근 나왔던 급식</h4>
+    <ul>
+        {% for meal in food.meals_ordered %}
+            <li>{{ meal }}</li>
+        {% endfor %}
+    </ul>
 </div>
 <div class="modal-footer">
-	{% if request.user.is_authenticated %}
-		{% if now_favorite %}
-			<button type="button" id="favorite" class="btn btn-default">
-				<span class="glyphicon glyphicon-star"></span> 즐겨찾기 <span id="favorite-text">해제</span>
-			</button>
-		{% else %}
-			<button type="button" id="favorite" class="btn btn-primary">
-				<span class="glyphicon glyphicon-star"></span> 즐겨찾기 <span id="favorite-text">등록</span>
-			</button>
-		{% endif %}
-	{% endif %}
-	<button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+    {% if request.user.is_authenticated %}
+        {% if now_favorite %}
+            <button type="button" id="favorite" class="btn btn-default">
+                <span class="glyphicon glyphicon-star"></span> 즐겨찾기 <span id="favorite-text">해제</span>
+            </button>
+        {% else %}
+            <button type="button" id="favorite" class="btn btn-primary">
+                <span class="glyphicon glyphicon-star"></span> 즐겨찾기 <span id="favorite-text">등록</span>
+            </button>
+        {% endif %}
+    {% endif %}
+    <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
 </div>
 
 <script>
-	function loadRating(){
-		$("#rating").html('<div class="spinner"><div class="rect1"></div><div class="rect2"></div><div class="rect3"></div><div class="rect4"></div><div class="rect5"></div></div>');
+    function loadRating(){
+        $("#rating").html('<div class="spinner"><div class="rect1"></div><div class="rect2"></div><div class="rect3"></div><div class="rect4"></div><div class="rect5"></div></div>');
 
-		$.ajax({
-			url: "{% url 'food_rating' food_id=food.id %}"
-		}).done(function(response){
-			$("#rating").html(response);
-		}).fail(function(response){
-			$("#rating").html('<span class="glyphicon glyphicon-remove"></span>');
-		});
-	}
+        $.ajax({
+            url: "{% url 'food_rating' food_id=food.id %}"
+        }).done(function(response){
+            $("#rating").html(response);
+        }).fail(function(response){
+            $("#rating").html('<span class="glyphicon glyphicon-remove"></span>');
+        });
+    }
 
-	$(document).ready(function(){
-		loadRating();
+    $(document).ready(function(){
+        loadRating();
 
-		$("#favorite").click(function(){
-			var params = {
-				type: "POST",
-				url: "{% url 'update_favorite' %}",
-				data: {
-					food_id: "{{ food.id }}"
-				}
-			};
+        $("#favorite").click(function(){
+            var params = {
+                type: "POST",
+                url: "{% url 'update_favorite' %}",
+                data: {
+                    food_id: "{{ food.id }}"
+                }
+            };
 
-			if($(this).hasClass("btn-default")){
-				$(this).addClass("btn-primary");
-				$(this).removeClass("btn-default");
-				$("#favorite-text").text("등록");
-				params.data.add = 0;
-			} else {
-				$(this).removeClass("btn-primary");
-				$(this).addClass("btn-default");
-				$("#favorite-text").text("해제");
-				params.data.add = 1;
-			}
+            if($(this).hasClass("btn-default")){
+                $(this).addClass("btn-primary");
+                $(this).removeClass("btn-default");
+                $("#favorite-text").text("등록");
+                params.data.add = 0;
+            } else {
+                $(this).removeClass("btn-primary");
+                $(this).addClass("btn-default");
+                $("#favorite-text").text("해제");
+                params.data.add = 1;
+            }
 
-			$.ajax(params);
-		});
-	});
+            $.ajax(params);
+        });
+    });
 </script>

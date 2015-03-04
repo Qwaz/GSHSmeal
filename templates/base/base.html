@@ -1,65 +1,65 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>GSHS Meal</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GSHS Meal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-	{% include 'include/css.html' %}
+    {% include 'include/css.html' %}
 
-	<style>
-		body {
-			padding-top: 50px;
-			padding-bottom: 30px;
-		}
-	</style>
+    <style>
+        body {
+            padding-top: 50px;
+            padding-bottom: 30px;
+        }
+    </style>
 </head>
 <body>
-	<nav class="navbar navbar-default navbar-fixed-top">
-		<div class="container">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
-					<span class="sr-only">Toggle navigation</span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-				<a class="navbar-brand" href="{% url 'home' %}">GSHS Meal</a>
-			</div>
-			<div class="collapse navbar-collapse" id="main-navbar">
-				<ul class="nav navbar-nav">
-				{% if request.user.is_authenticated %}
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> {{ request.user.username }} <b class="caret"></b></a>
-						<ul class="dropdown-menu">
-							{% if request.user.is_staff %}
-								<li><a href="{% url 'admin:index' %}">관리자 페이지</a></li>
-								<li class="divider"></li>
-							{% endif %}
-							<li><a href="{% url 'logout' %}">로그아웃</a></li>
-						</ul>
-					</li>
-				{% else %}
-					<li><a href="{% url 'login' %}?next={{ request.path }}">로그인</a></li>
-				{% endif %}
-				</ul>
-			</div>
-		</div>
-	</nav>
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{% url 'home' %}">GSHS Meal</a>
+        </div>
+        <div class="collapse navbar-collapse" id="main-navbar">
+            <ul class="nav navbar-nav">
+                {% if request.user.is_authenticated %}
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> {{ request.user.username }} <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            {% if request.user.is_staff %}
+                                <li><a href="{% url 'admin:index' %}">관리자 페이지</a></li>
+                                <li class="divider"></li>
+                            {% endif %}
+                            <li><a href="{% url 'logout' %}">로그아웃</a></li>
+                        </ul>
+                    </li>
+                {% else %}
+                    <li><a href="{% url 'login' %}?next={{ request.path }}">로그인</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
 
-	<div class="container">
-		{% for message in messages %}
-			<div class="alert alert-{{ message.tags }}">
-				{{ message }}
-			</div>
-		{% endfor %}
+<div class="container">
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+    {% endfor %}
 
-		{% block content %}
-		{% endblock %}
-	</div>
+    {% block content %}
+    {% endblock %}
+</div>
 
-	{% include 'include/js.html' %}
+{% include 'include/js.html' %}
 
-	{% block script %}
-	{% endblock %}
+{% block script %}
+{% endblock %}
 </body>
 </html>

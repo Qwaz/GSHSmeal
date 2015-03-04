@@ -1,59 +1,59 @@
 {% extends 'base/base.html' %}
 
 {% block content %}
-	<h2>{{ today }}({{ day }})</h2>
+    <h2>{{ today }}({{ day }})</h2>
 
-	<hr>
+    <hr>
 
-	<div class="modal fade" tabindex="-1" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-			</div>
-		</div>
-	</div>
+    <div class="modal fade" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
 
-	<div class="panel-group" id="accordion">
-		{% for meal in meals %}
-			{% include 'meal/meal.html' with data_parent="accordion" %}
-		{% endfor %}
-	</div>
+    <div class="panel-group" id="accordion">
+        {% for meal in meals %}
+            {% include 'meal/meal.html' with data_parent="accordion" %}
+        {% endfor %}
+    </div>
 
-	{% if updating %}
-	<div class="bs-callout bs-callout-warning">
-		<h4>급식 정보가 업데이트 되는 중입니다.</h4>
-		업데이트가 완료될 때까지 잠시 기다려주세요.
-	</div>
-	{% endif %}
+    {% if updating %}
+        <div class="bs-callout bs-callout-warning">
+            <h4>급식 정보가 업데이트 되는 중입니다.</h4>
+            업데이트가 완료될 때까지 잠시 기다려주세요.
+        </div>
+    {% endif %}
 
-	<ul class="pager">
-		{% if prev_day %}
-			<li class="previous"><a href="{% url 'meal_view' prev_day|date:"Y-m-d" %}">&larr; {{ prev_day | date:"Y.m.d." }}</a></li>
-		{% endif %}
-		{% if next_day %}
-			<li class="next"><a href="{% url 'meal_view' next_day|date:"Y-m-d" %}">{{ next_day | date:"Y.m.d." }} &rarr;</a></li>
-		{% endif %}
-	</ul>
+    <ul class="pager">
+        {% if prev_day %}
+            <li class="previous"><a href="{% url 'meal_view' prev_day|date:"Y-m-d" %}">&larr; {{ prev_day | date:"Y.m.d." }}</a></li>
+        {% endif %}
+        {% if next_day %}
+            <li class="next"><a href="{% url 'meal_view' next_day|date:"Y-m-d" %}">{{ next_day | date:"Y.m.d." }} &rarr;</a></li>
+        {% endif %}
+    </ul>
 {% endblock %}
 
 {% block script %}
-<script>
-	var isHome = {{ isHome|yesno:"true,false" }};
+    <script>
+        var isHome = {{ isHome|yesno:"true,false" }};
 
-	$(document).ready(function(){
-		if(isHome){
-			var hour = new Date().getHours();
+        $(document).ready(function(){
+            if(isHome){
+                var hour = new Date().getHours();
 
-			if(19 <= hour && $('#snack').length > 0) $('#snack').addClass('in');
-			else if(hour < 9) $('#breakfast').addClass('in');
-			else if(9 <= hour && hour < 14) $('#lunch').addClass('in');
-			else if(14 <= hour) $('#dinner').addClass('in');
-		} else {
-			$('#breakfast').addClass('in');
-		}
-	});
+                if(19 <= hour && $('#snack').length > 0) $('#snack').addClass('in');
+                else if(hour < 9) $('#breakfast').addClass('in');
+                else if(9 <= hour && hour < 14) $('#lunch').addClass('in');
+                else if(14 <= hour) $('#dinner').addClass('in');
+            } else {
+                $('#breakfast').addClass('in');
+            }
+        });
 
-	$('body').on('hidden.bs.modal', '.modal', function(){
-		$(this).removeData('bs.modal');
-	});
-</script>
+        $('body').on('hidden.bs.modal', '.modal', function(){
+            $(this).removeData('bs.modal');
+        });
+    </script>
 {% endblock %}

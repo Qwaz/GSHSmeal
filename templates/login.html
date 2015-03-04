@@ -2,39 +2,39 @@
 {% load staticfiles %}
 
 {% block content %}
-	<div class="bs-callout bs-callout-info">
-		<h4>송죽학사와 동일한 계정을 사용할 수 있습니다.</h4>
-		비밀번호는 암호화되어 전송되며, 사이트에 저장되지 않습니다.
-	</div>
-	{% include 'form.html' with action='./?next='|add:redirect_to onsubmit='encryptRSA()' %}
+    <div class="bs-callout bs-callout-info">
+        <h4>송죽학사와 동일한 계정을 사용할 수 있습니다.</h4>
+        비밀번호는 암호화되어 전송되며, 사이트에 저장되지 않습니다.
+    </div>
+    {% include 'form.html' with action='./?next='|add:redirect_to onsubmit='encryptRSA()' %}
 {% endblock %}
 
 {% block script %}
-	<script src="{% static 'js/crypto/prng4.js' %}"></script>
-	<script src="{% static 'js/crypto/rng.js' %}"></script>
-	<script src="{% static 'js/crypto/jsbn.js' %}"></script>
-	<script src="{% static 'js/crypto/rsa.js' %}"></script>
-	<script>
-		function encryptRSA() {
-			var username = $("#id").val();
-			var password = $("#password").val();
+    <script src="{% static 'js/crypto/prng4.js' %}"></script>
+    <script src="{% static 'js/crypto/rng.js' %}"></script>
+    <script src="{% static 'js/crypto/jsbn.js' %}"></script>
+    <script src="{% static 'js/crypto/rsa.js' %}"></script>
+    <script>
+        function encryptRSA() {
+            var username = $("#id").val();
+            var password = $("#password").val();
 
-			var rsaPublicKeyModulus = $("#m").val();
-			var rsaPublicKeyExponent = "10001";
+            var rsaPublicKeyModulus = $("#m").val();
+            var rsaPublicKeyExponent = "10001";
 
-			var rsa = new RSAKey();
-			rsa.setPublic(rsaPublicKeyModulus, rsaPublicKeyExponent);
+            var rsa = new RSAKey();
+            rsa.setPublic(rsaPublicKeyModulus, rsaPublicKeyExponent);
 
-			var securedUsername = rsa.encrypt(username);
-			var securedPassword = rsa.encrypt(password);
+            var securedUsername = rsa.encrypt(username);
+            var securedPassword = rsa.encrypt(password);
 
-			$("#password").val('');
-			$("#m").val('');
+            $("#password").val('');
+            $("#m").val('');
 
-			$("#secure_id").val(securedUsername);
-			$("#secure_password").val(securedPassword);
+            $("#secure_id").val(securedUsername);
+            $("#secure_password").val(securedPassword);
 
-			return true;
-		}
-	</script>
+            return true;
+        }
+    </script>
 {% endblock %}

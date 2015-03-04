@@ -4,8 +4,8 @@ from meals.models import Meal, Food, Menu
 
 
 class FoodAdmin(admin.ModelAdmin):
-	ordering = ['name']
-	search_fields = ['name']
+    ordering = ['name']
+    search_fields = ['name']
 
 
 admin.site.register(Meal)
